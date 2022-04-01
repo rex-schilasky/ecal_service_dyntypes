@@ -1,11 +1,13 @@
 #include <ecal/protobuf/ecal_proto_dyn.h>
 #include "math.pb.h"
+
 #include <iostream>
+#include <memory>
 
 class MathServiceImpl : public MathService
 {
 public:
-  virtual void Add(::google::protobuf::RpcController* /* controller_ */, const ::SFloatTuple* /*request_*/, ::SFloat* /*response_*/, ::google::protobuf::Closure* /* done_ */) {}
+  virtual void Add     (::google::protobuf::RpcController* /* controller_ */, const ::SFloatTuple* /*request_*/, ::SFloat* /*response_*/, ::google::protobuf::Closure* /* done_ */) {}
   virtual void Multiply(::google::protobuf::RpcController* /* controller_ */, const ::SFloatTuple* /*request_*/, ::SFloat* /*response_*/, ::google::protobuf::Closure* /* done_ */) {}
 };
 
@@ -17,7 +19,7 @@ void GetMessageType(const google::protobuf::ServiceDescriptor* service_desc_, co
 
   std::string file_desc_s = file_desc->DebugString();
   google::protobuf::FileDescriptorProto file_desc_proto;
-  eCAL::protobuf::CProtoDynDecoder* msg_decoder = new eCAL::protobuf::CProtoDynDecoder();
+  std::shared_ptr<eCAL::protobuf::CProtoDynDecoder> msg_decoder = std::make_shared<eCAL::protobuf::CProtoDynDecoder>();
   msg_decoder->GetFileDescriptorFromString(file_desc_s, &file_desc_proto, error_s);
 
   google::protobuf::FileDescriptorSet pset;
@@ -50,7 +52,6 @@ void GetServiceMessageTypes(const google::protobuf::ServiceDescriptor* service_d
 
 int main(int /*argc*/, char** /*argv*/)
 {
-      // create Math service server
   std::shared_ptr<MathService> math_service = std::make_shared<MathServiceImpl>();
 
   const google::protobuf::ServiceDescriptor* service_desc = math_service->GetDescriptor();
