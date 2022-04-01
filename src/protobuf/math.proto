@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+option cc_generic_services = true;
+
+///////////////////////////////////////////////////////
+// Math Service
+///////////////////////////////////////////////////////
+message SFloatTuple
+{
+  double inp1 = 1;
+  double inp2 = 2;
+}
+
+message SFloat
+{
+  double out  = 1;
+}
+
+service MathService
+{
+  rpc Add      (SFloatTuple) returns (SFloat);
+  rpc Multiply (SFloatTuple) returns (SFloat);
+}
